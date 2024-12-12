@@ -16,16 +16,14 @@ func SetupRoutes(
 ) *mux.Router {
 	router := mux.NewRouter()
 
-	// Открытые маршруты
 	router.HandleFunc("/login", userHandler.LoginUserHandler).Methods("POST")
 	router.HandleFunc("/register", userHandler.RegisterUserHandler).Methods("POST")
 
-	// Защищённые маршруты для пользователей
 	router.Handle("/user", authMiddleware.Middleware(http.HandlerFunc(userHandler.GetUserHandler))).Methods("GET")
 	router.Handle("/user/update", authMiddleware.Middleware(http.HandlerFunc(userHandler.UpdateUserHandler))).Methods("PUT")
 	router.Handle("/user/delete", authMiddleware.Middleware(http.HandlerFunc(userHandler.DeleteUserHandler))).Methods("DELETE")
 
-	// Защищённые маршруты для сообщений
+	
 	router.Handle("/messages", authMiddleware.Middleware(http.HandlerFunc(messageHandler.ListMessagesHandler))).Methods("GET")
 	router.Handle("/message", authMiddleware.Middleware(http.HandlerFunc(messageHandler.GetMessageHandler))).Methods("GET")
 	router.Handle(
